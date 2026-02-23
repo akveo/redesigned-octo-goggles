@@ -1,6 +1,7 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Fade, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { borderRadius, colorPalette } from "../../theme/colors";
+import { DEFAULT_TRANSITION } from "../../theme/theme";
 
 const StyledCard = styled(Box)(({ theme }) => ({
   flex: "1 1 auto",
@@ -20,14 +21,16 @@ interface StatsCardProps {
 
 const StatsCard = ({ value, label }: StatsCardProps) => {
   return (
-    <StyledCard>
-      <Typography variant="h3" sx={{ mb: 0.5, fontWeight: 700 }}>
-        {value}
-      </Typography>
-      <Typography variant="body2" color="text.secondary">
-        {label}
-      </Typography>
-    </StyledCard>
+    <Fade in={true} timeout={DEFAULT_TRANSITION}>
+      <StyledCard>
+        <Typography variant="h3" sx={{ mb: 0.5, fontWeight: 700 }}>
+          {value}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {label}
+        </Typography>
+      </StyledCard>
+    </Fade>
   );
 };
 

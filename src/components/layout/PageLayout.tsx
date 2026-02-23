@@ -1,4 +1,4 @@
-import { Box, type SxProps, useMediaQuery } from "@mui/material";
+import { Box, type SxProps } from "@mui/material";
 import { type ReactNode } from "react";
 
 interface PageLayoutProps {

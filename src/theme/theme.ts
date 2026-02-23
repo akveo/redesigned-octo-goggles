@@ -1,7 +1,7 @@
 import { createTheme } from "@mui/material/styles";
 import { borderRadius, borders, colorPalette, shadows } from "./colors";
 
-export const TRANSITION_DEFAULT_DURATION = 400;
+export const DEFAULT_TRANSITION = 400;
 export const TOOLBAR_HEIGHT = 56;
 export const SIDEBAR_WIDTH = 200;
 

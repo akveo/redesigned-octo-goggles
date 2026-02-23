@@ -1,5 +1,5 @@
 import AddIcon from "@mui/icons-material/Add";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { colorPalette } from "../theme/colors";
 import { type ServiceLog } from "../types";
@@ -78,34 +78,31 @@ const ControlPanel = ({ logs, onCreateLog }: ControlPanelProps) => {
   const { avgEngineHours, totalMiles, logsCount } = calculateWeeklyStats(logs);
 
   return (
-    <Stack gap={1} sx={{ width: "100%", maxWidth: "100%", overflow: "hidden" }}>
-      <Typography variant="h4">Weekly Overview</Typography>
-      <PanelContainer>
-        <StatsContainer>
-          <StatsGrid>
-            <StatsCard value={`${avgEngineHours}h`} label="Avg Engine Hours" />
-            <StatsCard
-              value={
-                totalMiles > 999
-                  ? `${(totalMiles / 1000).toFixed(1)}K`
-                  : totalMiles
-              }
-              label="Miles"
-            />
-            <StatsCard value={logsCount} label="Logs added" />
-          </StatsGrid>
-        </StatsContainer>
-        <Divider />
-        <ButtonContainer>
-          <CardButton
-            startIcon={<AddIcon sx={{ width: 48, height: 48 }} />}
-            onClick={onCreateLog}
-          >
-            Create Service Log
-          </CardButton>
-        </ButtonContainer>
-      </PanelContainer>
-    </Stack>
+    <PanelContainer>
+      <StatsContainer>
+        <StatsGrid>
+          <StatsCard value={`${avgEngineHours}h`} label="Avg Engine Hours" />
+          <StatsCard
+            value={
+              totalMiles > 999
+                ? `${(totalMiles / 1000).toFixed(1)}K`
+                : totalMiles
+            }
+            label="Miles"
+          />
+          <StatsCard value={logsCount} label="Logs added" />
+        </StatsGrid>
+      </StatsContainer>
+      <Divider />
+      <ButtonContainer>
+        <CardButton
+          startIcon={<AddIcon sx={{ width: 48, height: 48 }} />}
+          onClick={onCreateLog}
+        >
+          Create Service Log
+        </CardButton>
+      </ButtonContainer>
+    </PanelContainer>
   );
 };
 

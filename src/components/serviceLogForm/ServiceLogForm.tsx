@@ -333,9 +333,10 @@ const ServiceLogForm = ({
       </Stack>
 
       <Dialog
-        title="Browse All Drafts"
         open={isBrowseDraftsOpen}
         onClose={handleCloseBrowseDrafts}
+        hideCloseButton
+        contentStyle={{ padding: 0 }}
       >
         <LogDraftsTable
           drafts={allDrafts}

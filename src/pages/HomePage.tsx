@@ -6,7 +6,11 @@ import ServiceLogForm, {
   type ServiceLogFormData,
 } from "../components/serviceLogForm/ServiceLogForm";
 import ServiceLogsTable from "../components/ServiceLogsTable";
-import { DeleteConfirmationDialog, Dialog } from "../components/shared";
+import {
+  DeleteConfirmationDialog,
+  Dialog,
+  PageTitle,
+} from "../components/shared";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import {
   addServiceLog,
@@ -70,8 +74,14 @@ const HomePage = () => {
 
   return (
     <PageLayout>
-      <Stack spacing={4} sx={{ width: "100%", maxWidth: "100%", overflow: "hidden" }}>
-        <ControlPanel logs={logs} onCreateLog={handleCreateLog} />
+      <Stack
+        spacing={4}
+        sx={{ width: "100%", maxWidth: "100%", overflow: "hidden" }}
+      >
+        <Stack spacing={2}>
+          <PageTitle title="Weekly Overview" />
+          <ControlPanel logs={logs} onCreateLog={handleCreateLog} />
+        </Stack>
         <ServiceLogsTable
           logs={logs}
           onEditLog={handleEditLog}
@@ -84,21 +94,7 @@ const HomePage = () => {
           mode={editingLog ? "edit" : "create"}
           onSubmit={handleSubmitLog}
           onCancel={handleCloseDialog}
-          initialData={
-            editingLog
-              ? {
-                  providerId: editingLog.providerId,
-                  serviceOrder: editingLog.serviceOrder,
-                  carId: editingLog.carId,
-                  odometer: editingLog.odometer,
-                  engineHours: editingLog.engineHours,
-                  startDate: editingLog.startDate,
-                  endDate: editingLog.endDate,
-                  type: editingLog.type,
-                  serviceDescription: editingLog.serviceDescription,
-                }
-              : undefined
-          }
+          initialData={editingLog || undefined}
         />
       </Dialog>
 
@@ -106,7 +102,8 @@ const HomePage = () => {
         open={isDeleteDialogOpen}
         onClose={() => setIsDeleteDialogOpen(false)}
         onConfirm={handleConfirmDelete}
-        type="log"
+        title="Delete log"
+        description="Are you sure you want to delete this log? This action cannot be undone."
       />
     </PageLayout>
   );

@@ -5,3 +5,5 @@ export { default as Dialog } from './Dialog';
 export { default as Callout } from './Callout';
 export { default as ServiceTypeChip } from './ServiceTypeChip';
 export { default as DeleteConfirmationDialog } from './DeleteConfirmationDialog';
+export { default as FilterInput } from './FilterInput';
+export { default as PageTitle } from './PageTitle';

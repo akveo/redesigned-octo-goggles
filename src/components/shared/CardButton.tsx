@@ -1,7 +1,8 @@
-import { Button } from "@mui/material";
+import { Button, Fade } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { type ReactNode } from "react";
 import { borderRadius, colorPalette } from "../../theme/colors";
+import { DEFAULT_TRANSITION } from "../../theme/theme";
 
 interface CardButtonProps {
   onClick: () => void;
@@ -47,13 +48,15 @@ const StyledCardButton = styled(Button)(({ theme }) => ({
 
 const CardButton = ({ onClick, children, startIcon }: CardButtonProps) => {
   return (
-    <StyledCardButton
-      variant="contained"
-      onClick={onClick}
-      startIcon={startIcon}
-    >
-      {children}
-    </StyledCardButton>
+    <Fade in={true} timeout={DEFAULT_TRANSITION}>
+      <StyledCardButton
+        variant="contained"
+        onClick={onClick}
+        startIcon={startIcon}
+      >
+        {children}
+      </StyledCardButton>
+    </Fade>
   );
 };
 

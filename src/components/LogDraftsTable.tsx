@@ -1,19 +1,20 @@
-import { Delete, Search } from "@mui/icons-material";
+import { Delete } from "@mui/icons-material";
 import {
   Box,
   Button,
+  Fade,
   IconButton,
   Stack,
-  TextField,
   Typography,
 } from "@mui/material";
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 import { DateTime } from "luxon";
 import { useMemo, useState } from "react";
 import { borderRadius, borders } from "../theme/colors";
+import { DEFAULT_TRANSITION } from "../theme/theme";
 import { type DraftServiceLog } from "../types";
 import { commonServiceLogColumns } from "../utils/tableUtils";
-import { StyledCard } from "./shared";
+import { DeleteConfirmationDialog, FilterInput, StyledCard } from "./shared";
 
 type LogDraftsTableMode = "select" | "view";
 
@@ -23,6 +24,7 @@ interface LogDraftsTableProps {
   onSelectDraft?: (draft: DraftServiceLog) => void;
   onDeleteDraft?: (draftId: string) => void;
   onEditDraft?: (draft: DraftServiceLog) => void;
+  onDeleteAllDrafts?: () => void;
 }
 
 const LogDraftsTable = ({
@@ -31,8 +33,10 @@ const LogDraftsTable = ({
   onSelectDraft,
   onDeleteDraft,
   onEditDraft,
+  onDeleteAllDrafts,
 }: LogDraftsTableProps) => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [isDeleteAllDialogOpen, setIsDeleteAllDialogOpen] = useState(false);
 
   const filteredDrafts = useMemo(() => {
     if (!searchTerm) return drafts;
@@ -49,15 +53,6 @@ const LogDraftsTable = ({
   }, [drafts, searchTerm]);
 
   const columns: GridColDef[] = [
-    {
-      field: "updatedAt",
-      headerName: "Last Updated",
-      width: 180,
-      valueFormatter: (value) => {
-        return DateTime.fromISO(value).toLocaleString(DateTime.DATETIME_SHORT);
-      },
-    },
-    ...commonServiceLogColumns,
     {
       field: "actions",
       headerName: "Actions",
@@ -97,7 +92,12 @@ const LogDraftsTable = ({
 
         if (mode === "view") {
           return (
-            <Stack direction="row" spacing={1} alignItems="center">
+            <Stack
+              direction="row"
+              spacing={1}
+              alignItems="center"
+              sx={{ height: "100%" }}
+            >
               <Button
                 size="small"
                 variant="outlined"
@@ -119,6 +119,15 @@ const LogDraftsTable = ({
         return null;
       },
     },
+    {
+      field: "updatedAt",
+      headerName: "Last Updated",
+      width: 180,
+      valueFormatter: (value) => {
+        return DateTime.fromISO(value).toLocaleString(DateTime.DATETIME_SHORT);
+      },
+    },
+    ...commonServiceLogColumns,
   ];
 
   if (drafts.length === 0) {
@@ -139,70 +148,90 @@ const LogDraftsTable = ({
   }
 
   return (
-    <StyledCard
-      sx={{
-        padding: 0,
-        width: "100%",
-        maxWidth: "100%",
-        overflow: "hidden",
-        boxSizing: "border-box",
-      }}
-    >
-      <Box
-        sx={{
-          px: 2.5,
-          py: 2,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "flex-end",
-          gap: 2,
-        }}
-      >
-        <TextField
-          size="small"
-          placeholder="Filter by ID, Service Order, Car ID..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          slotProps={{
-            input: {
-              startAdornment: (
-                <Search sx={{ mr: 1, color: "text.secondary" }} />
-              ),
-            },
-          }}
-          sx={{ minWidth: 300, maxWidth: 400 }}
-        />
-      </Box>
-      <Box
-        sx={{ height: 400, width: "100%", maxWidth: "100%", overflow: "auto" }}
-      >
-        <DataGrid
-          rows={filteredDrafts}
-          columns={columns}
-          getRowId={(row) => row.draftId}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 10 },
-            },
-          }}
-          pageSizeOptions={[5, 10, 25]}
-          disableRowSelectionOnClick
-          disableColumnMenu
+    <>
+      <Fade in={true} timeout={DEFAULT_TRANSITION}>
+        <StyledCard
           sx={{
-            border: "none",
-            borderTop: borders.light,
-            borderRadius: borderRadius.large,
-            borderTopLeftRadius: 0,
-            borderTopRightRadius: 0,
-            "& .MuiDataGrid-columnHeaders": {
-              position: "sticky",
-              top: 0,
-              zIndex: 1,
-            },
+            padding: 0,
+            width: "100%",
+            maxWidth: "100%",
+            overflow: "hidden",
+            boxSizing: "border-box",
           }}
-        />
-      </Box>
-    </StyledCard>
+        >
+          <Box
+            sx={{
+              px: 2.5,
+              py: 2,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: 2,
+            }}
+          >
+            <Stack direction="row" spacing={2} alignItems="center">
+              {drafts.length > 0 && (
+                <Button
+                  variant="outlined"
+                  color="error"
+                  size="small"
+                  onClick={() => setIsDeleteAllDialogOpen(true)}
+                >
+                  Delete All Drafts
+                </Button>
+              )}
+            </Stack>
+            <FilterInput value={searchTerm} onChange={setSearchTerm} />
+          </Box>
+          <Box
+            sx={{
+              height: 400,
+              width: "100%",
+              maxWidth: "100%",
+              overflow: "auto",
+            }}
+          >
+            <DataGrid
+              rows={filteredDrafts}
+              columns={columns}
+              getRowId={(row) => row.draftId}
+              initialState={{
+                pagination: {
+                  paginationModel: { page: 0, pageSize: 10 },
+                },
+              }}
+              pageSizeOptions={[5, 10, 25]}
+              disableRowSelectionOnClick
+              disableColumnMenu
+              sx={{
+                border: "none",
+                borderTop: borders.light,
+                borderRadius: borderRadius.large,
+                borderTopLeftRadius: 0,
+                borderTopRightRadius: 0,
+                "& .MuiDataGrid-columnHeaders": {
+                  position: "sticky",
+                  top: 0,
+                  zIndex: 1,
+                },
+              }}
+            />
+          </Box>
+        </StyledCard>
+      </Fade>
+      <DeleteConfirmationDialog
+        open={isDeleteAllDialogOpen}
+        onClose={() => setIsDeleteAllDialogOpen(false)}
+        onConfirm={() => {
+          onDeleteAllDrafts?.();
+          setIsDeleteAllDialogOpen(false);
+        }}
+        title="Delete all drafts"
+        description={`Are you sure you want to delete all ${
+          drafts.length
+        } draft${drafts.length > 1 ? "s" : ""}? This action cannot be undone.`}
+      />
+    </>
   );
 };
 

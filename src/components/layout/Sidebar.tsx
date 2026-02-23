@@ -91,9 +91,10 @@ const Sidebar = () => {
                   "& .MuiTypography-root": {
                     fontSize: "0.875rem",
                     fontWeight: location.pathname === item.path ? 600 : 400,
-                    color: location.pathname === item.path
-                      ? colorPalette.primary.dark
-                      : "inherit",
+                    color:
+                      location.pathname === item.path
+                        ? colorPalette.primary.dark
+                        : "inherit",
                   },
                 }}
               />

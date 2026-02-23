@@ -1,7 +1,7 @@
 import { AppBar, Slide, Toolbar, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { borders, colorPalette } from "../../theme/colors";
-import { TOOLBAR_HEIGHT, TRANSITION_DEFAULT_DURATION } from "../../theme/theme";
+import { DEFAULT_TRANSITION, TOOLBAR_HEIGHT } from "../../theme/theme";
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   backdropFilter: "blur(10px)",
@@ -40,7 +40,7 @@ const LogoText = styled(Typography)(({ theme }) => ({
 
 const Header = () => {
   return (
-    <Slide direction="down" in={true} timeout={TRANSITION_DEFAULT_DURATION}>
+    <Slide direction="down" in={true} timeout={DEFAULT_TRANSITION}>
       <StyledAppBar position="fixed" elevation={0}>
         <StyledToolbar>
           <LogoText variant="h6">MediDrive Test App</LogoText>

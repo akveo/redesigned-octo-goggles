@@ -6,9 +6,9 @@ import {
   IconButton,
   Dialog as MuiDialog,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { styled, type SxProps } from "@mui/material/styles";
 import { type TransitionProps } from "@mui/material/transitions";
-import { type ReactNode, forwardRef } from "react";
+import { forwardRef, type ReactNode } from "react";
 import { borderRadius } from "../../theme/colors";
 
 const StyledDialog = styled(MuiDialog)(({ theme }) => ({
@@ -48,10 +48,18 @@ interface DialogProps {
   onClose: () => void;
   children: ReactNode;
   hideCloseButton?: boolean;
+  contentStyle?: SxProps;
 }
 
 const Dialog = (props: DialogProps) => {
-  const { open, title, onClose, children, hideCloseButton = false } = props;
+  const {
+    open,
+    title,
+    onClose,
+    children,
+    hideCloseButton = false,
+    contentStyle = {},
+  } = props;
   return (
     <StyledDialog
       open={open}
@@ -84,7 +92,7 @@ const Dialog = (props: DialogProps) => {
             )}
           </StyledDialogTitle>
         ))}
-      <DialogContent>{children}</DialogContent>
+      <DialogContent sx={contentStyle}>{children}</DialogContent>
     </StyledDialog>
   );
 };

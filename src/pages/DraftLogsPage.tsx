@@ -1,16 +1,13 @@
-import { Box, Stack, Typography } from "@mui/material";
+import { Stack } from "@mui/material";
 import { useState } from "react";
 import { PageLayout } from "../components/layout";
 import LogDraftsTable from "../components/LogDraftsTable";
 import ServiceLogForm, {
   type ServiceLogFormData,
 } from "../components/serviceLogForm/ServiceLogForm";
-import {
-  DeleteConfirmationDialog,
-  Dialog,
-} from "../components/shared";
+import { DeleteConfirmationDialog, Dialog, PageTitle } from "../components/shared";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { addServiceLog, deleteDraft } from "../store/slices/serviceLogsSlice";
+import { addServiceLog, clearAllDrafts, deleteDraft } from "../store/slices/serviceLogsSlice";
 import { type DraftServiceLog, type ServiceLog } from "../types";
 
 const DraftLogsPage = () => {
@@ -40,6 +37,10 @@ const DraftLogsPage = () => {
     }
   };
 
+  const handleDeleteAllDrafts = () => {
+    dispatch(clearAllDrafts());
+  };
+
   const handleCloseDialog = () => {
     setIsEditDialogOpen(false);
     setSelectedDraft(null);
@@ -60,21 +61,21 @@ const DraftLogsPage = () => {
 
   return (
     <PageLayout>
-      <Stack spacing={4} sx={{ width: "100%", maxWidth: "100%", overflow: "hidden" }}>
-        <Box>
-          <Typography variant="h4" gutterBottom>
-            Draft Logs
-          </Typography>
-          <Typography variant="body1" color="text.secondary">
-            View and manage your unsubmitted service log drafts
-          </Typography>
-        </Box>
+      <Stack
+        spacing={4}
+        sx={{ width: "100%", maxWidth: "100%", overflow: "hidden" }}
+      >
+        <PageTitle
+          title="Draft Logs"
+          description="View and manage your unsubmitted service log drafts"
+        />
 
         <LogDraftsTable
           drafts={drafts}
           mode="view"
           onEditDraft={handleEditDraft}
           onDeleteDraft={handleDeleteDraft}
+          onDeleteAllDrafts={handleDeleteAllDrafts}
         />
       </Stack>
 
@@ -107,7 +108,8 @@ const DraftLogsPage = () => {
         open={isDeleteDialogOpen}
         onClose={() => setIsDeleteDialogOpen(false)}
         onConfirm={handleConfirmDelete}
-        type="draft"
+        title="Delete draft"
+        description="Are you sure you want to delete this draft? This action cannot be undone."
       />
     </PageLayout>
   );

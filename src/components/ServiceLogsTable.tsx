@@ -1,10 +1,10 @@
-import { Delete, Search } from "@mui/icons-material";
+import { Delete } from "@mui/icons-material";
 import {
   Box,
   Button,
+  Fade,
   IconButton,
   Stack,
-  TextField,
   Typography,
 } from "@mui/material";
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
@@ -12,7 +12,7 @@ import { useMemo, useState } from "react";
 import { borderRadius, borders } from "../theme/colors";
 import { type ServiceLog } from "../types";
 import { commonServiceLogColumns } from "../utils/tableUtils";
-import { StyledCard } from "./shared";
+import { FilterInput, StyledCard } from "./shared";
 
 interface ServiceLogsTableProps {
   logs: ServiceLog[];
@@ -42,7 +42,6 @@ const ServiceLogsTable = ({
   }, [logs, searchTerm]);
 
   const columns: GridColDef[] = [
-    ...commonServiceLogColumns,
     {
       field: "actions",
       headerName: "Actions",
@@ -78,72 +77,67 @@ const ServiceLogsTable = ({
         );
       },
     },
+    ...commonServiceLogColumns,
   ];
   return (
-    <StyledCard
-      sx={{
-        padding: 0,
-        width: "100%",
-        maxWidth: "100%",
-        overflow: "hidden",
-        boxSizing: "border-box",
-      }}
-    >
-      <Box
+    <Fade in={true} timeout={600}>
+      <StyledCard
         sx={{
-          px: 2.5,
-          py: 2,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: 2,
+          padding: 0,
+          width: "100%",
+          maxWidth: "100%",
+          overflow: "hidden",
+          boxSizing: "border-box",
         }}
       >
-        <Typography variant="h5">Service Logs</Typography>
-        <TextField
-          size="small"
-          placeholder="Filter by ID, Service Order, Car ID..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          slotProps={{
-            input: {
-              startAdornment: (
-                <Search sx={{ mr: 1, color: "text.secondary" }} />
-              ),
-            },
-          }}
-          sx={{ minWidth: 300, maxWidth: 400 }}
-        />
-      </Box>
-      <Box
-        sx={{ height: 400, width: "100%", maxWidth: "100%", overflow: "auto" }}
-      >
-        <DataGrid
-          rows={filteredLogs}
-          columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 10 },
-            },
-          }}
-          pageSizeOptions={[5, 10, 25]}
-          disableRowSelectionOnClick
-          disableColumnMenu
+        <Box
           sx={{
-            border: "none",
-            borderTop: borders.light,
-            borderRadius: borderRadius.large,
-            borderTopLeftRadius: 0,
-            borderTopRightRadius: 0,
-            "& .MuiDataGrid-columnHeaders": {
-              position: "sticky",
-              top: 0,
-              zIndex: 1,
-            },
+            px: 2.5,
+            py: 2,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 2,
           }}
-        />
-      </Box>
-    </StyledCard>
+        >
+          <Typography variant="h5">Service Logs</Typography>
+          <FilterInput value={searchTerm} onChange={setSearchTerm} />
+        </Box>
+        <Box
+          sx={{
+            height: 400,
+            width: "100%",
+            maxWidth: "100%",
+            overflow: "auto",
+          }}
+        >
+          <DataGrid
+            rows={filteredLogs}
+            columns={columns}
+            initialState={{
+              pagination: {
+                paginationModel: { page: 0, pageSize: 10 },
+              },
+            }}
+            pageSizeOptions={[5, 10, 25]}
+            disableRowSelectionOnClick
+            disableColumnMenu
+            sx={{
+              border: "none",
+              borderTop: borders.light,
+              borderRadius: borderRadius.large,
+              borderTopLeftRadius: 0,
+              borderTopRightRadius: 0,
+              "& .MuiDataGrid-columnHeaders": {
+                position: "sticky",
+                top: 0,
+                zIndex: 1,
+              },
+            }}
+          />
+        </Box>
+      </StyledCard>
+    </Fade>
   );
 };
 

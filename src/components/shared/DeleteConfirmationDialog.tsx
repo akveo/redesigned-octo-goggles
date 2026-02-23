@@ -11,13 +11,12 @@ import { type TransitionProps } from "@mui/material/transitions";
 import { forwardRef } from "react";
 import { borderRadius } from "../../theme/colors";
 
-type DeleteType = "log" | "draft";
-
 interface DeleteConfirmationDialogProps {
   open: boolean;
   onClose: () => void;
   onConfirm: () => void;
-  type: DeleteType;
+  title: string;
+  description: string;
 }
 
 const StyledDialog = styled(MuiDialog)(({ theme }) => ({
@@ -46,10 +45,9 @@ const DeleteConfirmationDialog = ({
   open,
   onClose,
   onConfirm,
-  type,
+  title,
+  description,
 }: DeleteConfirmationDialogProps) => {
-  const itemName = type === "log" ? "log" : "draft";
-
   return (
     <StyledDialog
       open={open}
@@ -65,11 +63,10 @@ const DeleteConfirmationDialog = ({
     >
       <Box>
         <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
-          Delete {itemName}
+          {title}
         </Typography>
         <Typography variant="body2" sx={{ mb: 3, color: "text.secondary" }}>
-          Are you sure you want to delete this {itemName}? This action cannot be
-          undone.
+          {description}
         </Typography>
         <Stack direction="row" spacing={2}>
           <Button onClick={onClose} variant="outlined" fullWidth>

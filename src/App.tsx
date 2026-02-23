@@ -1,4 +1,9 @@
-import { BrowserRouter, Route, Routes as RouterRoutes } from "react-router-dom";
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes as RouterRoutes,
+} from "react-router-dom";
 import { AppLayout } from "./components/layout";
 import DraftLogsPage from "./pages/DraftLogsPage";
 import HomePage from "./pages/HomePage";
@@ -11,6 +16,7 @@ function App() {
         <RouterRoutes>
           <Route path={Routes.HOME} element={<HomePage />} />
           <Route path={Routes.DRAFTS} element={<DraftLogsPage />} />
+          <Route path="*" element={<Navigate to={Routes.HOME} />} />
         </RouterRoutes>
       </AppLayout>
     </BrowserRouter>
